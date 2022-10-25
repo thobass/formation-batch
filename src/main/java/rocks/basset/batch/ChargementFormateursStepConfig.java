@@ -2,6 +2,7 @@ package rocks.basset.batch;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.database.JdbcBatchItemWriter;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import rocks.basset.batch.domain.Formateur;
+import rocks.basset.batch.listeners.ChargementFormateursStepListener;
 import rocks.basset.batch.mappers.FormateurItemPreparedStatementSetter;
 
 import javax.sql.DataSource;
@@ -55,6 +57,12 @@ public class ChargementFormateursStepConfig {
                 .<Formateur, Formateur>chunk(10)
                 .reader(formateurItemReader(null))
                 .writer(formateurItemWriter(null))
+                .listener(chargementFormateursStepListener())
                 .build();
+    }
+
+    @Bean
+    public StepExecutionListener chargementFormateursStepListener() {
+        return new ChargementFormateursStepListener();
     }
 }
