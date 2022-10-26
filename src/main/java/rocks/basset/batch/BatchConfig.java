@@ -45,12 +45,12 @@ public class BatchConfig {
     public Job job(final JobBuilderFactory jobBuilderFactory,
                    final Step chargementFormateursStep,
                    final Step chargementFormationsStep,
-                   final Step chargementSeancesStep){
+                   final Step chargementSeancesTxtStep){
         return jobBuilderFactory.get("formation-batch")
                 .incrementer(new RunIdIncrementer())
                 .start(chargementFormateursStep)
                 .next(chargementFormationsStep)
-                .next(chargementSeancesStep)
+                .next(chargementSeancesTxtStep)
                 .validator(compositeJobParametersValidator())
                 .build();
     }
