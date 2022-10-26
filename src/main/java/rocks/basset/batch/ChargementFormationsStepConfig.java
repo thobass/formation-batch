@@ -2,6 +2,7 @@ package rocks.basset.batch;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.Step;
+import org.springframework.batch.core.StepExecutionListener;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemWriter;
@@ -16,6 +17,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import rocks.basset.batch.domain.Formateur;
 import rocks.basset.batch.domain.Formation;
+import rocks.basset.batch.listeners.ChargementFormateursStepListener;
+import rocks.basset.batch.listeners.ChargementFormationsStepListener;
 import rocks.basset.batch.mappers.FormateurItemPreparedStatementSetter;
 import rocks.basset.batch.mappers.FormationItemPreparedStatementSetter;
 
@@ -62,6 +65,12 @@ public class ChargementFormationsStepConfig {
                 .<Formation, Formation>chunk(10)
                 .reader(formationItemReader(null))
                 .writer(formationItemWriter(null))
+                .listener(chargementFormationsStepListener())
                 .build();
+    }
+
+    @Bean
+    public StepExecutionListener chargementFormationsStepListener() {
+        return new ChargementFormationsStepListener();
     }
 }
