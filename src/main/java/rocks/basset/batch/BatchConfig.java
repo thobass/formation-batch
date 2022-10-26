@@ -42,10 +42,13 @@ public class BatchConfig {
     }
 
     @Bean
-    public Job job(final JobBuilderFactory jobBuilderFactory, final Step chargementFormateursStep){
+    public Job job(final JobBuilderFactory jobBuilderFactory,
+                   final Step chargementFormateursStep,
+                   final Step chargementFormationsStep){
         return jobBuilderFactory.get("formation-batch")
                 .incrementer(new RunIdIncrementer())
                 .start(chargementFormateursStep)
+                .next(chargementFormationsStep)
                 .validator(compositeJobParametersValidator())
                 .build();
     }
