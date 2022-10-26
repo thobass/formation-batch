@@ -8,10 +8,12 @@ import org.springframework.batch.core.configuration.annotation.JobBuilderFactory
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
 import org.springframework.batch.core.job.CompositeJobParametersValidator;
 import org.springframework.batch.core.job.DefaultJobParametersValidator;
+import org.springframework.batch.core.job.flow.JobExecutionDecider;
 import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import rocks.basset.batch.deciders.SeancesStepDecider;
 import rocks.basset.batch.domain.Formateur;
 import rocks.basset.batch.validators.MyJobParametersValidator;
 
@@ -42,15 +44,26 @@ public class BatchConfig {
     }
 
     @Bean
+    public JobExecutionDecider seancesStepDecider(){
+        return new SeancesStepDecider();
+    }
+
+    @Bean
     public Job job(final JobBuilderFactory jobBuilderFactory,
                    final Step chargementFormateursStep,
                    final Step chargementFormationsStep,
-                   final Step chargementSeancesTxtStep){
+                   final Step chargementSeancesTxtStep,
+                   final Step chargementSeancesCsvStep){
         return jobBuilderFactory.get("formation-batch")
                 .incrementer(new RunIdIncrementer())
                 .start(chargementFormateursStep)
                 .next(chargementFormationsStep)
-                .next(chargementSeancesTxtStep)
+                .next(seancesStepDecider())
+                .from(seancesStepDecider()).on("txt").to(chargementSeancesTxtStep)
+                .from(seancesStepDecider()).on("csv").to(chargementSeancesCsvStep)
+                .from(chargementSeancesTxtStep).on("*").end()
+                .from(chargementSeancesCsvStep).on("*").end()
+                .end()
                 .validator(compositeJobParametersValidator())
                 .build();
     }
