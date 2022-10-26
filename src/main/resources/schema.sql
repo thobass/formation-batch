@@ -36,8 +36,8 @@ ALTER TABLE formateurs
 ALTER TABLE formations
     ADD PRIMARY KEY (code);
 
-ALTER TABLE seances
-    ADD PRIMARY KEY (code_formation,id_formateur);
+-- ALTER TABLE seances
+--    ADD PRIMARY KEY (code_formation,id_formateur);
 
 
 ALTER TABLE seances
