@@ -9,7 +9,7 @@ import org.springframework.util.StringUtils;
 public class SeancesStepDecider implements JobExecutionDecider {
     @Override
     public FlowExecutionStatus decide(JobExecution jobExecution, StepExecution stepExecution) {
-        if(StringUtils.endsWithIgnoreCase(stepExecution.getJobParameters().getString("seancesFile"), "csv")){
+        if(StringUtils.endsWithIgnoreCase(jobExecution.getJobParameters().getString("seancesFile"), "csv")){
             return new FlowExecutionStatus("csv");
         }
 
