@@ -53,7 +53,8 @@ public class BatchConfig {
                    final Step chargementFormateursStep,
                    final Step chargementFormationsStep,
                    final Step chargementSeancesTxtStep,
-                   final Step chargementSeancesCsvStep){
+                   final Step chargementSeancesCsvStep,
+                   final Step planningStep){
         return jobBuilderFactory.get("formation-batch")
                 .incrementer(new RunIdIncrementer())
                 .start(chargementFormateursStep)
@@ -61,8 +62,8 @@ public class BatchConfig {
                 .next(seancesStepDecider())
                 .from(seancesStepDecider()).on("txt").to(chargementSeancesTxtStep)
                 .from(seancesStepDecider()).on("csv").to(chargementSeancesCsvStep)
-                .from(chargementSeancesTxtStep).on("*").end()
-                .from(chargementSeancesCsvStep).on("*").end()
+                .from(chargementSeancesTxtStep).on("*").to(planningStep)
+                .from(chargementSeancesCsvStep).on("*").to(planningStep)
                 .end()
                 .validator(compositeJobParametersValidator())
                 .build();
