@@ -47,7 +47,7 @@ public class ChargementSeancesStepConfig {
     @Bean
     @StepScope
     public FlatFileItemReader<Seance> seanceCsvItemReader(
-            @Value("file:#{jobParameters['seancesFile']}") Resource inputFile
+            @Value("#{jobParameters['seancesFile']}") Resource inputFile
     ){
         return new FlatFileItemReaderBuilder<Seance>()
                 .name("SeanceCsvItemReader")
@@ -62,7 +62,7 @@ public class ChargementSeancesStepConfig {
     @Bean
     @StepScope
     public FlatFileItemReader<Seance> seanceTxtItemReader(
-            @Value("file:#{jobParameters['seancesFile']}") Resource inputFile
+            @Value("#{jobParameters['seancesFile']}") Resource inputFile
     ){
         return new FlatFileItemReaderBuilder<Seance>()
                 .name("SeanceTxtItemReader")

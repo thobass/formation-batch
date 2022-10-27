@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
+import rocks.basset.batch.dao.SeanceDAO;
 import rocks.basset.batch.domain.Planning;
 import rocks.basset.batch.mappers.PlanningRowMapper;
 import rocks.basset.batch.processors.PlanningProcessor;
@@ -35,8 +36,8 @@ public class PlanningStepConfig {
     }
 
     @Bean
-    public ItemProcessor<Planning, Planning> planningProcessor(final NamedParameterJdbcTemplate jdbcTemplate){
-        return new PlanningProcessor(jdbcTemplate);
+    public ItemProcessor<Planning, Planning> planningProcessor(final SeanceDAO seanceDAO){
+        return new PlanningProcessor(seanceDAO);
     }
 
     @Bean

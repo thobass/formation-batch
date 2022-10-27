@@ -10,11 +10,13 @@ import org.springframework.batch.item.database.JdbcBatchItemWriter;
 import org.springframework.batch.item.database.builder.JdbcBatchItemWriterBuilder;
 import org.springframework.batch.item.xml.StaxEventItemReader;
 import org.springframework.batch.item.xml.builder.StaxEventItemReaderBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
+import rocks.basset.batch.dao.FormationDAO;
 import rocks.basset.batch.domain.Formateur;
 import rocks.basset.batch.domain.Formation;
 import rocks.basset.batch.listeners.ChargementFormateursStepListener;
@@ -34,7 +36,7 @@ public class ChargementFormationsStepConfig {
     @Bean
     @StepScope
     public StaxEventItemReader<Formation> formationItemReader(
-            @Value("file:#{jobParameters['formationsFile']}") Resource inputFile
+            @Value("#{jobParameters['formationsFile']}") Resource inputFile
     ){
         return new StaxEventItemReaderBuilder<Formation>().name("formationItemReader")
                 .resource(inputFile)

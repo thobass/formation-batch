@@ -30,7 +30,7 @@ public class ChargementFormateursStepConfig {
     @Bean
     @StepScope
     public FlatFileItemReader<Formateur> formateurItemReader(
-            @Value("file:#{jobParameters['formateursFile']}") final Resource inputFile
+            @Value("#{jobParameters['formateursFile']}") final Resource inputFile
     ){
         return new FlatFileItemReaderBuilder<Formateur>()
                 .name("FormateurItemReader")
